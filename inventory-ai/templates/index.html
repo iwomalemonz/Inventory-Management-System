@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inventory simulator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+  <main>
+    <div class="inner">
+      <header class="top">
+        <h1>Inventory simulator</h1>
+        <p class="lede">See which products are likely to run out, based on weekday, date of the month, season and festivals.</p>
+      </header>
+
+      <section class="controls" aria-label="Simulation controls">
+        <div class="slider-block">
+          <label for="days">Days to simulate: <strong id="daysValue">7</strong>
+            <span class="muted" id="daysSeconds">(35 seconds)</span></label>
+          <input id="days" type="range" min="1" max="30" value="7">
+        </div>
+        <label class="check">
+          <input id="smart" type="checkbox" checked>
+          <span>Restock using the forecast</span>
+        </label>
+        <div class="buttons">
+          <button id="simulateBtn" class="primary" type="button">Simulate</button>
+          <button id="resetBtn" class="ghost" type="button">Reset</button>
+        </div>
+      </section>
+
+    </div>
+
+    <div class="wide">
+      <section class="block" aria-labelledby="stockTitle">
+        <div class="block-head">
+          <h2 id="stockTitle">Stock on hand</h2>
+          <div class="legend" aria-hidden="true">
+            <span><i class="dot" style="background:#2E9E5B"></i>Full</span>
+            <span><i class="dot" style="background:#F0B429"></i>Half</span>
+            <span><i class="dot" style="background:#D64545"></i>Empty</span>
+          </div>
+        </div>
+        <div class="chart tall"><canvas id="stockChart"></canvas></div>
+      </section>
+
+    </div>
+
+    <div class="inner">
+      <section class="kpis" aria-label="Totals so far">
+        <div><span class="k-label">Units sold</span><span class="k-value" id="kSold">0</span></div>
+        <div><span class="k-label">Units restocked</span><span class="k-value" id="kRestocked">0</span></div>
+        <div><span class="k-label">Missed (out of stock)</span><span class="k-value" id="kLost">0</span></div>
+        <div><span class="k-label">Sales value</span><span class="k-value" id="kValue">0</span></div>
+        <div><span class="k-label">Orders filled</span><span class="k-value" id="kService">100%</span></div>
+      </section>
+
+      <div class="two">
+        <section class="block" aria-labelledby="outlookTitle">
+          <div class="block-head">
+            <h2 id="outlookTitle">Demand outlook</h2>
+            <div class="legend" aria-hidden="true">
+              <span><i class="dot" style="background:#F0B429"></i>High</span>
+              <span><i class="dot" style="background:#C3CCC8"></i>Normal</span>
+              <span><i class="dot" style="background:#7FA6CC"></i>Low</span>
+            </div>
+          </div>
+          <p class="sub" id="festivalLine">&nbsp;</p>
+          <div class="chart"><canvas id="outlookChart"></canvas></div>
+        </section>
+
+        <section class="block" aria-labelledby="riskTitle">
+          <div class="block-head"><h2 id="riskTitle">Stock-out risk</h2></div>
+          <p class="sub" id="riskSub">&nbsp;</p>
+          <ul id="riskList" class="risk"></ul>
+        </section>
+      </div>
+
+      <section class="block" aria-labelledby="totalTitle">
+        <div class="block-head"><h2 id="totalTitle">Total inventory over time</h2></div>
+        <div class="chart short"><canvas id="totalChart"></canvas></div>
+      </section>
+
+      <details class="how">
+        <summary>How the forecast works</summary>
+        <div id="howBody"></div>
+      </details>
+    </div>
+  </main>
+
+  <aside id="corner" aria-live="polite" aria-label="Simulation log">
+    <div class="corner-head">
+      <div class="date-main" id="dateMain">Ready</div>
+      <div class="date-sub" id="dayOf">Choose days and press Simulate</div>
+      <div class="demand normal" id="demand">Normal</div>
+    </div>
+    <div id="log" class="log"></div>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
